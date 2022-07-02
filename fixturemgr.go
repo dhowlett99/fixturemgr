@@ -16,8 +16,8 @@ import (
 var fixtureList = []string{}
 var channelList = []string{}
 
-const BUTTON_OUTER int = 1
-const RECTANGLE int = 0
+const BUTTON_OUTER int = 0
+const RECTANGLE int = 1
 const BUTTON int = 0
 
 func main() {
@@ -78,9 +78,9 @@ func main() {
 		},
 		func() fyne.CanvasObject {
 			//return widget.NewLabel("template")
-			b := container.NewPadded(widget.NewButton("", nil))
+			b := container.NewMax(widget.NewButton("", nil))
 			r := canvas.NewRectangle(White)
-			c := container.NewMax(r, b)
+			c := container.NewMax(b, r)
 
 			return c
 
