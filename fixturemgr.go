@@ -30,11 +30,12 @@ func main() {
 	myApp := app.New()
 	w := myApp.NewWindow("DMXLights Fixture Editor")
 
-	Blue := color.NRGBA{R: 0, G: 0, B: 100, A: 100}
+	//Blue := color.NRGBA{R: 0, G: 0, B: 100, A: 100}
 
 	White := color.NRGBA{R: 0, G: 0, B: 0, A: 0}
 
 	var fixturePanel *widget.List
+	var groupPanel *widget.List
 
 	// Read sequences config file.
 	fmt.Println("Load Sequences Config File")
@@ -71,11 +72,9 @@ func main() {
 			)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
-			//o.(*widget.Label).SetText(fixtureList[i])
 
 			o.(*fyne.Container).Objects[0].(*widget.Label).SetText(channelList[i])
 
-			// new part
 			o.(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				fmt.Printf("I have selected channel %s\n", channelList[i])
 			}
@@ -88,32 +87,26 @@ func main() {
 			return len(fixtureInfoPanelList)
 		},
 		func() fyne.CanvasObject {
-			//return widget.NewLabel("template")
 			return container.NewMax(
 				widget.NewLabel("template"),
 				widget.NewButton("", nil),
 			)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
-			//o.(*widget.Label).SetText(fixtureList[i])
 
 			o.(*fyne.Container).Objects[0].(*widget.Label).SetText(fixtureInfoPanelList[i])
 
-			// new part
 			o.(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
 				fmt.Println("I am selecting a " + fixtureInfoPanelList[i])
 			}
 		})
 
 	// Fixtures Selection Panel.
-	var rFixture *canvas.Rectangle
-	var lastSelectedFixtureRectange *canvas.Rectangle
 	fixturePanel = widget.NewList(
 		func() int {
 			return len(fixtureList)
 		},
 		func() fyne.CanvasObject {
-			//return widget.NewLabel("template")
 			b := container.NewMax(widget.NewButton("", nil))
 			r := canvas.NewRectangle(White)
 			c := container.NewMax(b, r)
@@ -129,17 +122,9 @@ func main() {
 			o.(*fyne.Container).Objects[BUTTON_OUTER].(*fyne.Container).Objects[BUTTON].(*widget.Button).OnTapped = func() {
 				fmt.Printf("Fixture Selection is %s\n", fixtureList[i])
 
-				// Turn off any existing selections.
-				if lastSelectedFixtureRectange != nil {
-					lastSelectedFixtureRectange.FillColor = White
-					lastSelectedFixtureRectange.Refresh()
-				}
-
-				// Turn on the selected button.
-				rFixture = o.(*fyne.Container).Objects[RECTANGLE].(*canvas.Rectangle)
-				rFixture.FillColor = Blue
-				rFixture.Refresh()
-				lastSelectedFixtureRectange = rFixture
+				// Turn on the selected fixture button.
+				info, _ := strconv.Atoi(fixtureList[i])
+				fixturePanel.Select(info - 1)
 
 				// Populate the fixtures info panel.
 				fixtureInfoPanelList = getFixtureDetails(fixtureList[i], selectedGroup, fixturesConfig)
@@ -152,14 +137,11 @@ func main() {
 		})
 
 	// Group Selection Panel.
-	var rGroup *canvas.Rectangle
-	var lastSelectedGroupRectange *canvas.Rectangle
-	groupPanel := widget.NewList(
+	groupPanel = widget.NewList(
 		func() int {
 			return len(groupList)
 		},
 		func() fyne.CanvasObject {
-			//return widget.NewLabel("template")
 			b := container.NewMax(widget.NewButton("", nil))
 			r := canvas.NewRectangle(White)
 			c := container.NewMax(b, r)
@@ -177,20 +159,13 @@ func main() {
 
 				selectedGroup, _ = strconv.Atoi(groupList[i])
 
-				// Turn off any existing selections.
-				if lastSelectedGroupRectange != nil {
-					lastSelectedGroupRectange.FillColor = White
-					lastSelectedGroupRectange.Refresh()
-				}
-
-				// Turn on the selected button.
-				rGroup = o.(*fyne.Container).Objects[RECTANGLE].(*canvas.Rectangle)
-				rGroup.FillColor = Blue
-				rGroup.Refresh()
-				lastSelectedGroupRectange = rGroup
+				// Turn on the selected group button.
+				group, _ := strconv.Atoi(groupList[i])
+				groupPanel.Select(group - 1)
 
 				// Populate the fixtures list panel based on the group number
 				fixtureList = getFixtureList(groupList[i], fixturesConfig)
+				fixturePanel.Select(0)
 				fixturePanel.Refresh()
 
 				// Populate the fixtures info based on the first fixture in this group.
