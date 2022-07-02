@@ -219,8 +219,8 @@ func getChannelList(fixtureNumber string, groupNumber int, fixturesConfig *fixtu
 		if f.Group == groupNumber {
 			if f.Number == fixture {
 				for _, c := range f.Channels {
-					//fmt.Printf("Channel %+v\n", c.Name)
-					channelsList = append(channelsList, c.Name)
+
+					channelsList = append(channelsList, fmt.Sprintf("No:%d %s\n", c.Number, c.Name))
 				}
 			}
 		}
