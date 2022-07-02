@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"image/color"
+	"log"
 	"os"
 	"strconv"
 
@@ -29,6 +30,8 @@ const BUTTON int = 0
 func main() {
 	myApp := app.New()
 	w := myApp.NewWindow("DMXLights Fixture Editor")
+
+	channelOptions := []string{"Red1", "Red2", "Red3", "Red4", "Red5", "Red6", "Red7", "Red8", "Green1", "Green2", "Green3", "Green4", "Green5", "Green6", "Green7", "Green8", "Blue1", "Blue2", "Blue3", "Blue4", "Blue5", "Blue6", "Blue7", "Blue8", "Master", "Dimmer", "Static", "Pan", "FinePan", "Tilt", "FineTilt", "Shutter", "Strobe", "Color", "Gobo", "Programs"}
 
 	//Blue := color.NRGBA{R: 0, G: 0, B: 100, A: 100}
 
@@ -67,17 +70,23 @@ func main() {
 		func() fyne.CanvasObject {
 			//return widget.NewLabel("template")
 			return container.NewPadded(
-				widget.NewLabel("template"),
-				widget.NewButton("", nil),
+				//widget.NewLabel("template"),
+				//widget.NewButton("", nil),
+				widget.NewSelect(channelOptions, func(value string) {
+					log.Println("Select set to", value)
+				}),
 			)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
 
-			o.(*fyne.Container).Objects[0].(*widget.Label).SetText(channelList[i])
+			fmt.Printf("Channel ID is %d   Channel Setting is %s\n", i, channelList[i])
+			o.(*fyne.Container).Objects[0].(*widget.Select).SetSelected(channelList[i])
 
-			o.(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
-				fmt.Printf("I have selected channel %s\n", channelList[i])
-			}
+			//o.(*fyne.Container).Objects[0].(*widget.Label).SetText(channelList[i])
+
+			// o.(*fyne.Container).Objects[1].(*widget.Button).OnTapped = func() {
+			// 	fmt.Printf("I have selected channel %s\n", channelList[i])
+			// }
 		})
 
 	// FixtureInfo Panel.
@@ -220,7 +229,7 @@ func getChannelList(fixtureNumber string, groupNumber int, fixturesConfig *fixtu
 			if f.Number == fixture {
 				for _, c := range f.Channels {
 
-					channelsList = append(channelsList, fmt.Sprintf("No:%d %s\n", c.Number, c.Name))
+					channelsList = append(channelsList, c.Name)
 				}
 			}
 		}
