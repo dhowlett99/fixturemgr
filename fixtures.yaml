@@ -274,7 +274,7 @@ fixtures:
   - number: 13
     name: MasterDimmer
 - name: Uplighter1
-  number: 3
+  number: 1
   description: Chauvet Color Rail IRC
   type: rgb
   address: 172
@@ -334,7 +334,7 @@ fixtures:
   - number: 26
     name: Strobe
 - name: Uplighter2
-  number: 4
+  number: 2
   description: Fluxia DLB100
   type: rgb
   address: 200
