@@ -36,7 +36,7 @@ func main() {
 
 	var fixturePanel *widget.List
 
-	// Read sequences config file
+	// Read sequences config file.
 	fmt.Println("Load Sequences Config File")
 	sequencesConfig, err := sequence.LoadSequences()
 	if err != nil {
@@ -50,13 +50,14 @@ func main() {
 		groupList = append(groupList, group)
 	}
 
+	// Read fixtures config file.
 	fixturesConfig, err := fixture.LoadFixtures()
 	if err != nil {
 		fmt.Printf("fixture manager: error loading fixtures config file.\n")
 		os.Exit(1)
 	}
 
-	// Setup Channels Panel.
+	// Channel Selection Panel.
 	channelList = []string{}
 	channelPanel := widget.NewList(
 		func() int {
@@ -80,7 +81,7 @@ func main() {
 			}
 		})
 
-	// Setup Fixture Info Panel.
+	// FixtureInfo Panel.
 	fixtureInfoPanelList = []string{"Fixture", "Info"}
 	fixtureInfoPanel := widget.NewList(
 		func() int {
@@ -104,7 +105,7 @@ func main() {
 			}
 		})
 
-	// Setup Fixtures Select Panel.
+	// Fixtures Selection Panel.
 	var rFixture *canvas.Rectangle
 	var lastSelectedFixtureRectange *canvas.Rectangle
 	fixturePanel = widget.NewList(
@@ -150,7 +151,7 @@ func main() {
 			}
 		})
 
-	// Setup Group Select Panel.
+	// Group Selection Panel.
 	var rGroup *canvas.Rectangle
 	var lastSelectedGroupRectange *canvas.Rectangle
 	groupPanel := widget.NewList(
@@ -195,6 +196,10 @@ func main() {
 				// Populate the fixtures info based on the first fixture in this group.
 				fixtureInfoPanelList = getFixtureDetails("1", selectedGroup, fixturesConfig)
 				fixtureInfoPanel.Refresh()
+
+				// Populate the channels panel based on the first channel.
+				channelList = getChannelList("1", selectedGroup, fixturesConfig)
+				channelPanel.Refresh()
 			}
 		})
 
